@@ -1,0 +1,25 @@
+package com.googlecode.jobop.domain;
+
+public class Consumer {
+	/** appgroup+方法签名 */
+	private String key;
+
+	private Object[] methodArgus;
+
+	public Object[] getMethodArgus() {
+		return methodArgus;
+	}
+
+	public void setMethodArgus(Object[] methodArgus) {
+		this.methodArgus = methodArgus;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.googlecode.jobop.protocol.handlers;
+
+public interface InvokeObject {
+
+}

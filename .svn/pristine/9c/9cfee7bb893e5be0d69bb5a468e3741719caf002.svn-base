@@ -1,0 +1,103 @@
+package com.googlecode.jobop.bootstrap.spring;
+
+import java.util.Set;
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextStartedEvent;
+
+import com.googlecode.jobop.bootstrap.JobopBootstrap;
+
+/**
+ * 基于spring上下文的启动器桥接，用于链接spring上下文和jobop启动方式.
+ * 
+ * @author van
+ * 
+ */
+public class SpringContextBootstrapAdpter implements JobopBootstrap, ApplicationListener {
+	/** 需要启动的所有组件 */
+	private Set<JobopBootstrap> bootstrapComponents;
+
+	@Override
+	public void init() {
+		System.out.println("唯一启动器，init。。");
+		// 初始化所有组件
+		for (JobopBootstrap bootstrap : bootstrapComponents) {
+			bootstrap.init();
+		}
+
+	}
+
+	@Override
+	public void startup() {
+		System.out.println("唯一启动器，startup。。");
+		// 启动所有组件
+		for (JobopBootstrap bootstrap : bootstrapComponents) {
+			bootstrap.startup();
+		}
+
+	}
+
+	@Override
+	public void shutdown() {
+		// 关闭所有组件
+		for (JobopBootstrap bootstrap : bootstrapComponents) {
+			bootstrap.shutdown();
+		}
+	}
+
+	/**
+	 * 注册启动组件
+	 * 
+	 * @param component
+	 */
+	public void registComponent(JobopBootstrap component) {
+		synchronized (this) {
+			bootstrapComponents.add(component);
+		}
+	}
+
+	/**
+	 * 去除組件
+	 * 
+	 * @param component
+	 */
+	public void removeComponent(JobopBootstrap component) {
+		synchronized (this) {
+			bootstrapComponents.remove(component);
+		}
+	}
+
+	/**
+	 * 在上下文加载完毕侯，开始启动服务
+	 */
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event instanceof ContextStartedEvent) {
+			this.init();
+			this.startup();
+			// 注册关闭钩子
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					for (JobopBootstrap bootstrap : bootstrapComponents) {
+						try {
+							bootstrap.shutdown();
+							removeComponent(bootstrap);
+						} catch (Exception e) {
+							// TODO:日志
+						}
+					}
+				}
+			});
+		}
+	}
+
+	public Set<JobopBootstrap> getBootstrapComponents() {
+		return bootstrapComponents;
+	}
+
+	public void setBootstrapComponents(Set<JobopBootstrap> bootstrapComponents) {
+		this.bootstrapComponents = bootstrapComponents;
+	}
+}

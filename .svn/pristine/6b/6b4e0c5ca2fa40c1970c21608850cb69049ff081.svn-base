@@ -1,0 +1,19 @@
+package com.googlecode.jobop.support;
+
+/**
+ * Jobop运行时支撑接口
+ * 
+ * @author van
+ * 
+ */
+public interface JobopSupport {
+	/**
+	 * 初始化运行时工具
+	 */
+	public void init();
+
+	/**
+	 * 销毁运行时工具
+	 */
+	public void destory();
+}

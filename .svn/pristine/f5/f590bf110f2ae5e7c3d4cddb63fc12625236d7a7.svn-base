@@ -1,0 +1,39 @@
+package com.googlecode.jobop.components.wrapper;
+
+import org.springframework.beans.factory.FactoryBean;
+
+import com.googlecode.jobop.components.JobopConsumerComponet;
+
+/**
+ * 包装JobopConsumerComponet，屏蔽核心跟spring的依赖
+ * 
+ * @author van
+ * 
+ */
+public class JobopConsumerComponetWrapper implements FactoryBean {
+	private JobopConsumerComponet jobopConsumerComponet;
+
+	@Override
+	public Object getObject() throws Exception {
+		return jobopConsumerComponet.getObject();
+	}
+
+	@Override
+	public Class<? extends Object> getObjectType() {
+		return jobopConsumerComponet.getObjectType();
+	}
+
+	@Override
+	public boolean isSingleton() {
+		return jobopConsumerComponet.isSingleton();
+	}
+
+	public JobopConsumerComponet getJobopConsumerComponet() {
+		return jobopConsumerComponet;
+	}
+
+	public void setJobopConsumerComponet(JobopConsumerComponet jobopConsumerComponet) {
+		this.jobopConsumerComponet = jobopConsumerComponet;
+	}
+
+}

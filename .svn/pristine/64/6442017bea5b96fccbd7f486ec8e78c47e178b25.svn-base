@@ -1,0 +1,16 @@
+package com.googlecode.jobop.notify;
+
+/**
+ * 具体的一个通知
+ * 
+ * @author van
+ * 
+ */
+public interface Notify<T> {
+	/**
+	 * 获取通知内容
+	 * 
+	 * @return
+	 */
+	public T getContent();
+}

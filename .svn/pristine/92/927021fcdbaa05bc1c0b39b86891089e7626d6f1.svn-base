@@ -1,0 +1,57 @@
+package com.googlecode.jobop.bootstrap.spring.schema;
+
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
+
+import com.googlecode.jobop.components.JobopConsumerComponet;
+import com.googlecode.jobop.components.wrapper.JobopConsumerComponetWrapper;
+import com.googlecode.jobop.constants.JobopCommonConstant;
+
+/**
+ * 服務消費者組件解析器
+ * 
+ * @author van
+ * 
+ */
+public class ConsumerBeanDefinitionParser extends AbstractBeanDefinitionParser<JobopConsumerComponet> {
+
+	@Override
+	protected BeanDefinition extraParse(BeanDefinition curDefinition, Element element, ParserContext parserContext) {
+		// 传过来的是一个非factorybean的definition，使用時，需要用到的是一個factory的bean，所以這裏需要包裝一下
+		// 真实的bean只是使用器啓動功能，上下文中使用和代理等功能通過wrapper來控制（包装bean最后也是调用真实bean的功能）
+		// 註冊包裝bean
+		RootBeanDefinition wrapperBeanDefinition = new RootBeanDefinition(JobopConsumerComponetWrapper.class);
+		// 这里要使用用户配置的id，应为用户真正使用的时候是
+		parserContext.getRegistry().registerBeanDefinition(element.getAttribute(JobopCommonConstant.ID),
+				wrapperBeanDefinition);
+		// 把真實bean包装进去
+		wrapperBeanDefinition.getPropertyValues().addPropertyValue("jobopConsumerComponet", curDefinition);
+		// 真实bean设置
+		String appGroup = element.getAttribute(JobopCommonConstant.APP_GROUP);
+		String interfaceName = element.getAttribute(JobopCommonConstant.INTERFACE_NAME);
+		String connectionTimeout = element.getAttribute(JobopCommonConstant.CONNECTION_TIMEOUT);
+		String readTimeout = element.getAttribute(JobopCommonConstant.READ_TIMEOUT);
+		String policy = element.getAttribute(JobopCommonConstant.POLICY);
+		curDefinition.getPropertyValues().addPropertyValue("appGroup", appGroup);
+		curDefinition.getPropertyValues().addPropertyValue("interfaceName", interfaceName);
+		curDefinition.getPropertyValues().addPropertyValue("connectionTimeout", connectionTimeout);
+		curDefinition.getPropertyValues().addPropertyValue("readTimeout", readTimeout);
+		curDefinition.getPropertyValues().addPropertyValue("policy", policy);
+
+		return wrapperBeanDefinition;
+	}
+
+	@Override
+	protected Class<JobopConsumerComponet> getBeanClazz() {
+		return JobopConsumerComponet.class;
+	}
+
+	@Override
+	protected String beanPrefix() {
+		// TODO Auto-generated method stub
+		return "_real_";
+	}
+
+}

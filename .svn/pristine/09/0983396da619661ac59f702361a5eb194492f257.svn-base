@@ -1,0 +1,19 @@
+package com.googlecode.jobop.proxy.factory;
+
+import com.googlecode.jobop.bean.ablity.Destroyable;
+
+/**
+ * 代理工廠接口
+ * 
+ * @author van
+ * 
+ */
+public interface JobopProxyFactory extends Destroyable {
+	/**
+	 * 獲取一個代理
+	 * 
+	 * @return
+	 */
+	public <T> T generateProxy(String interfaceName, String readTimeout, String appGroup, Object refObj);
+
+}

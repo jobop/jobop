@@ -1,0 +1,25 @@
+package com.googlecode.jobop.notify;
+
+/**
+ * 通知接收者
+ * 
+ * @author van
+ * 
+ */
+public interface NotifyReceiver {
+	/**
+	 * 是否能处理通知,调用doReceive之前需要调用此方法判断该接收器是否可以处理该通知，避免大量处理无用通知
+	 * 
+	 * @param noify
+	 * @return
+	 */
+	public boolean canReceive(Notify<?> notify);
+
+	/**
+	 * 处理通知
+	 * 
+	 * @param noify
+	 */
+	public void doReceive(Notify<?> notify);
+
+}

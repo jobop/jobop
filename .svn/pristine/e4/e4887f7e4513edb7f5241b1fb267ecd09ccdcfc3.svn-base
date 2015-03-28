@@ -1,0 +1,63 @@
+package com.googlecode.jobop.zk.factory;
+
+import static com.netflix.curator.framework.CuratorFrameworkFactory.newClient;
+
+import java.io.IOException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import com.googlecode.jobop.utils.PropertyUtil;
+import com.netflix.curator.framework.CuratorFramework;
+import com.netflix.curator.retry.ExponentialBackoffRetry;
+
+/**
+ * 管理zkClient，保证全局只有一个client在使用
+ * 
+ * @author van
+ * 
+ */
+public class Zkfactory {
+	/**
+	 * 控制单例生成的锁
+	 */
+	private static Lock lock = new ReentrantLock();
+	/**
+	 * zk客户端
+	 */
+	private CuratorFramework client;
+
+	private static Zkfactory factory;
+
+	private Zkfactory() {
+		try {
+			client = newClient(PropertyUtil.getZkServerList(), PropertyUtil.getZkSessionTimeout(),
+					PropertyUtil.getZkConnectTimeout(), new ExponentialBackoffRetry(500, 20));
+			client.start();
+		} catch (IOException e) {
+			// TODO 日志
+			e.printStackTrace();
+		}
+	}
+
+	public static Zkfactory newInstance() {
+
+		if (null == factory) {
+			try {
+				lock.lock();
+				if (null == factory) {
+					factory = new Zkfactory();
+				}
+			} finally {
+				lock.unlock();
+			}
+
+		}
+		return factory;
+
+	}
+
+	public CuratorFramework getClient() {
+		return client;
+	}
+
+}

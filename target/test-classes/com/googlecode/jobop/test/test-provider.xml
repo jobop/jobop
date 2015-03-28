@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:jobop="http://www.googlecode.com/schema/jobop"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+    http://www.googlecode.com/schema/jobop http://www.googlecode.com/schema/jobop/jobop.xsd">
+   
+   <!-- 定义smallObjectServiceBean-->
+   <bean id="helloBean" class="com.googlecode.jobop.facade.HelloImpl"/>
+   <bean id="helloBean2" class="com.googlecode.jobop.facade.HelloImpl2"/>
+   <jobop:service  interface_name="com.googlecode.jobop.facade.IHello" app_group="app1" ref_obj="helloBean" />
+   <jobop:service  interface_name="com.googlecode.jobop.facade.IHello2" app_group="app1" ref_obj="helloBean2" />
+   
+   
+   <jobop:reference id="hello1"  interface_name="com.googlecode.jobop.facade.IHello" app_group="app3"/>
+   <jobop:reference id="hello2"   interface_name="com.googlecode.jobop.facade.IHello2" app_group="app4"/>
+</beans>

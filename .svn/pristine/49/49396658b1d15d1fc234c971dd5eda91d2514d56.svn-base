@@ -1,0 +1,114 @@
+package com.googlecode.jobop.components;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.googlecode.jobop.bean.ablity.FactoryBeanable;
+import com.googlecode.jobop.bootstrap.JobopBootstrap;
+import com.googlecode.jobop.proxy.factory.ConsumerProxyFactory;
+import com.googlecode.jobop.proxy.factory.JobopProxyFactory;
+
+/**
+ * 服务消费者组件，定义了服务消费者的启动行为
+ * 
+ * @author van
+ * 
+ */
+public class JobopConsumerComponet implements JobopBootstrap, FactoryBeanable {
+	private static Logger logger = LoggerFactory.getLogger(JobopConsumerComponet.class);
+	private JobopProxyFactory factory = null;
+	/** 接口名 */
+	private String interfaceName;
+	/** 鏈接超時 */
+	private String connectionTimeout;
+	/** 读取超时 */
+	private String readTimeout;
+	/** 应用组 */
+	private String appGroup;
+	/** 轮寻规则 */
+	private String policy;
+
+	@Override
+	public void init() {
+		logger.info("服务消費者组件init。。。" + "interfaceName=" + interfaceName + " connectionTimeout=" + connectionTimeout
+				+ " readTimeout=" + readTimeout + " appGroup=" + appGroup + " policy=" + policy);
+		factory = ConsumerProxyFactory.newInstance();
+	}
+
+	@Override
+	public void startup() {
+		logger.info("服务消費者组件startup。。。" + "interfaceName=" + interfaceName + " connectionTimeout=" + connectionTimeout
+				+ " readTimeout=" + readTimeout + " appGroup=" + appGroup + " policy=" + policy);
+	}
+
+	@Override
+	public void shutdown() {
+
+	}
+
+	@Override
+	public Object getObject() throws Exception {
+		logger.info("服务消費者组件getobject。。。" + "interfaceName=" + interfaceName + " connectionTimeout="
+				+ connectionTimeout + " readTimeout=" + readTimeout + " appGroup=" + appGroup + " policy=" + policy);
+		return "I'm consumer proxy";
+	}
+
+	@Override
+	public Class<? extends Object> getObjectType() {
+		return null;
+	}
+
+	@Override
+	public boolean isSingleton() {
+		return false;
+	}
+
+	public JobopProxyFactory getFactory() {
+		return factory;
+	}
+
+	public void setFactory(JobopProxyFactory factory) {
+		this.factory = factory;
+	}
+
+	public String getInterfaceName() {
+		return interfaceName;
+	}
+
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}
+
+	public String getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	public void setConnectionTimeout(String connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
+
+	public String getReadTimeout() {
+		return readTimeout;
+	}
+
+	public void setReadTimeout(String readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	public String getAppGroup() {
+		return appGroup;
+	}
+
+	public void setAppGroup(String appGroup) {
+		this.appGroup = appGroup;
+	}
+
+	public String getPolicy() {
+		return policy;
+	}
+
+	public void setPolicy(String policy) {
+		this.policy = policy;
+	}
+
+}

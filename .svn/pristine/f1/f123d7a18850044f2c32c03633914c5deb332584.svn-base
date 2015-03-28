@@ -1,0 +1,122 @@
+package com.googlecode.jobop.support;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.jboss.netty.channel.ChannelHandlerContext;
+
+import com.googlecode.jobop.domain.Consumer;
+import com.googlecode.jobop.domain.Provider;
+import com.googlecode.jobop.notify.Notify;
+import com.googlecode.jobop.notify.NotifyReceiver;
+import com.googlecode.jobop.notify.ProviderRegistNotify;
+import com.googlecode.jobop.protocol.domain.JobopRequest;
+import com.googlecode.jobop.protocol.domain.JobopResponse;
+import com.googlecode.jobop.protocol.handlers.JobopRequestProcessor;
+import com.googlecode.jobop.utils.JobopNotifyUtil;
+
+/**
+ * Jobop服务提供者任务处理支撑
+ * 
+ * @author van
+ * 
+ */
+public class JobopProviderProcessSupport implements JobopSupport, NotifyReceiver, JobopRequestProcessor {
+	private AtomicLong startTime = new AtomicLong(0);
+	/** 用来处理业务的线程池 */
+	private static ExecutorService processExecutor;
+	/** 可用于服务的提供者 */
+	private static Map<String, Provider> providers = new ConcurrentHashMap<String, Provider>();
+
+	@Override
+	public void init() {
+		// 初始化一个线程池，用来处理业务，代码只执行一次
+		if (startTime.compareAndSet(0, System.currentTimeMillis())) {
+			JobopNotifyUtil.regisetReceiver(this);
+			processExecutor = Executors.newCachedThreadPool(new ThreadFactory() {
+				@Override
+				public Thread newThread(Runnable runnable) {
+					return new Thread(runnable, "jobop-process-task");
+				}
+			});
+		}
+
+	}
+
+	@Override
+	public void destory() {
+		// 销毁线程池，代码只执行一次
+		if (!startTime.compareAndSet(0, 0)) {
+			processExecutor.shutdown();
+		}
+
+	}
+
+	@Override
+	public void doProcess(final ChannelHandlerContext ctx, final JobopRequest request) {
+		Consumer consumer = (Consumer) request.getContent();
+		Provider relProvider = providers.get(consumer.getKey());
+		if (null == relProvider) {
+			// TODO:抛异常
+		}
+		final Object invokeObj = relProvider.getProxyObj();
+		final Class<?> invokeClazz = relProvider.getInterfaceClazz();
+		final String methodName = relProvider.getMethodName();
+		final Class<?>[] arguTypes = relProvider.getMethodArgusTypes();
+		final Object[] argus = consumer.getMethodArgus();
+		processExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Object result = invokeClazz.getMethod(methodName, arguTypes).invoke(invokeObj, argus);
+					JobopResponse response = new JobopResponse();
+					response.setResultObj(result);
+					response.setId(request.getId());
+					ctx.getChannel().write(response);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	@Override
+	public boolean canReceive(Notify<?> notify) {
+		boolean canProcess = false;
+		if (notify instanceof ProviderRegistNotify) {
+			if (notify.getContent() != null) {
+				canProcess = true;
+			}
+		}
+		return canProcess;
+	}
+
+	@Override
+	public void doReceive(Notify<?> notify) {
+		Provider provider = (Provider) notify.getContent();
+		String key = provider.getKey();
+		if (providers.containsKey(key)) {
+			// TODO:日志
+
+			System.out.println("JobopProviderProcessSupport");
+
+			return;
+
+		}
+		providers.put(provider.getKey(), provider);
+	}
+
+}

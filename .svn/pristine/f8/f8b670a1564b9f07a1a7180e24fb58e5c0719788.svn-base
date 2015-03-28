@@ -1,0 +1,44 @@
+package com.googlecode.jobop.proxy.factory;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+/**
+ * 服务消費者的代理生成工厂
+ * 
+ * @author van
+ * 
+ */
+public class ConsumerProxyFactory implements JobopProxyFactory {
+
+	private static JobopProxyFactory factory = null;
+	private static Lock lock = new ReentrantLock();
+
+	private ConsumerProxyFactory() {
+	}
+
+	public static JobopProxyFactory newInstance() {
+		if (null == factory) {
+			try {
+				lock.lock();
+				if (factory == null) {
+					factory = new ConsumerProxyFactory();
+				}
+			} finally {
+				lock.unlock();
+			}
+		}
+		return factory;
+	}
+
+	@Override
+	public <T> T generateProxy(String interfaceName, String readTimeout, String appGroup, Object refObj) {
+		return null;
+	}
+
+	@Override
+	public void destroy() {
+
+	}
+
+}

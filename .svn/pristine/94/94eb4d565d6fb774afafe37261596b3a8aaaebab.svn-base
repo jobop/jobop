@@ -1,0 +1,54 @@
+package com.googlecode.jobop.utils;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.googlecode.jobop.notify.Notify;
+import com.googlecode.jobop.notify.NotifyReceiver;
+
+/**
+ * 通知操作工具
+ * 
+ * @author van
+ * 
+ */
+public class JobopNotifyUtil {
+	/** 所有通知接收者 */
+	private static ConcurrentLinkedQueue<NotifyReceiver> notifyReceivers = new ConcurrentLinkedQueue<NotifyReceiver>();
+
+	/**
+	 * 注册通知接收者
+	 * 
+	 * @param receiver
+	 */
+	public static void regisetReceiver(NotifyReceiver receiver) {
+		notifyReceivers.add(receiver);
+	}
+
+	/**
+	 * 移除一个接收者
+	 * 
+	 * @param receiver
+	 */
+	public static void removeReceiver(NotifyReceiver receiver) {
+		notifyReceivers.remove(receiver);
+	}
+
+	/**
+	 * 发送一个通知
+	 * 
+	 * @param notify
+	 */
+	public static void postNotify(Notify<?> notify) {
+		for (NotifyReceiver receiver : notifyReceivers) {
+			try {
+				if (receiver.canReceive(notify)) {
+					receiver.doReceive(notify);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO:日志
+			}
+		}
+
+	}
+}

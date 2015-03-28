@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.springframework.org/schema/myns"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+	targetNamespace="http://www.googlecode.com/schema/jobop"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[ Namespace support for the jobop services provided by jobop framework. ]]></xsd:documentation>
+	</xsd:annotation>
+
+
+	<xsd:element name="service">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[ The registry config ]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="interface_name" type="xsd:string"
+				use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[  the interface of the service. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+
+			<xsd:attribute name="app_group" type="xsd:string"
+				use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the group of the service. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+
+			<xsd:attribute name="ref_obj" type="xsd:string"
+				use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the implement of the service. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="connection_timeout" type="xsd:int" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the connect time of the reference. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="read_timeout" type="xsd:int" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the read time of the reference. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>				
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="reference">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[ The registry config ]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>			<xsd:attribute name="id" type="xsd:string" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[  the id of the bean. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+
+			<xsd:attribute name="interface_name" type="xsd:string"
+				use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[  the interface of the service. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+
+			<xsd:attribute name="app_group" type="xsd:string" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the group of the service. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+
+			<xsd:attribute name="connection_timeout" type="xsd:int" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the connect time of the reference. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="read_timeout" type="xsd:int" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the read time of the reference. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>			
+			<xsd:attribute name="policy" type="xsd:string" use="optional">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[ the policy of the reference. ]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

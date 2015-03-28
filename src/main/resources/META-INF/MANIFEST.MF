@@ -1,0 +1,34 @@
+Implementation-Title: Alipay aliprod Web Transfer Car
+Implementation-Version: 1.0.0
+Bundle-Name: Alipay Sofa MVC aliprod Transfer
+Bundle-SymbolicName: com.alipay.aliprod.web.transfer;singleton:=true
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Vendor: Alipay
+Require-Bundle: com.alipay.sofa.web.mvc.runtime,
+ com.alipay.aliprod.biz.transfer,
+ com.alipay.aliprod.web.home
+Bundle-Web-Name: transfer
+Spring-Loader: com.alipay.sofa.web.mvc.runtime
+Resource-Filter: aliprod-web-transfer.xml,
+ session.xml,
+ merge-smvc-scheme-default.xml,
+ merge-smvc-scheme-flow.xml,
+ merge-smvc-scheme-security.xml,
+ merge-smvc-scheme-json.xml,
+ merge-smvc-scheme-pull.xml,
+ merge-smvc-scheme-tiles.xml,
+ smvc-scheme-default.xml,
+ smvc-scheme-json.xml,
+ smvc-scheme-tiles.xml,
+ smvc-scheme-flow.xml,
+ smvc-scheme-security.xml,
+ smvc-scheme-pdf.xml,
+ smvc-scheme-zip.xml,
+ smvc-scheme-resource.xml,
+ smvc-scheme-pull.xml,
+ uri-brokers.xml,
+ sofa-runtime-smvc.xml,
+ sofa-runtime-smvc-scheme.xml,
+ sofa-runtime-smvc-adapter.xml
+

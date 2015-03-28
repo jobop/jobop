@@ -1,0 +1,23 @@
+package com.googlecode.jobop;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class TestSchema {
+	public static void main(String[] args) {
+
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+				"classpath:com/googlecode/jobop/test/test-provider.xml");
+		context.start();
+		String s = (String) context.getBean("hello1");
+		synchronized (TestSchema.class) {
+			while (true) {
+				try {
+					System.out.println(s);
+					TestSchema.class.wait(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+}

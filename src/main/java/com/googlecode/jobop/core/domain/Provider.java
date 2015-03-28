@@ -1,0 +1,88 @@
+package com.googlecode.jobop.core.domain;
+
+public class Provider {
+	/** appgroup+方法签名 */
+	private String key;
+	/** 方法签名 */
+	private String methodSign;
+	private String methodName;
+	private Class<?>[] methodArgusTypes;
+	private String appGroup;
+	private Class<?> interfaceClazz;
+	private Object proxyObj;
+	private long connectionTimeout;
+	private long readTimeout;
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getMethodSign() {
+		return methodSign;
+	}
+
+	public void setMethodSign(String methodSign) {
+		this.methodSign = methodSign;
+	}
+
+	public String getAppGroup() {
+		return appGroup;
+	}
+
+	public void setAppGroup(String appGroup) {
+		this.appGroup = appGroup;
+	}
+
+	public Class<?> getInterfaceClazz() {
+		return interfaceClazz;
+	}
+
+	public void setInterfaceClazz(Class<?> interfaceClazz) {
+		this.interfaceClazz = interfaceClazz;
+	}
+
+	public Object getProxyObj() {
+		return proxyObj;
+	}
+
+	public void setProxyObj(Object proxyObj) {
+		this.proxyObj = proxyObj;
+	}
+
+	public long getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	public void setConnectionTimeout(long connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
+
+	public long getReadTimeout() {
+		return readTimeout;
+	}
+
+	public void setReadTimeout(long readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	public Class<?>[] getMethodArgusTypes() {
+		return methodArgusTypes;
+	}
+
+	public void setMethodArgusTypes(Class<?>[] methodArgusTypes) {
+		this.methodArgusTypes = methodArgusTypes;
+	}
+
+}
